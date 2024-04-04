@@ -1,12 +1,12 @@
 #include <iostream>
 #include <vector>
-#include <string>
 #include <algorithm>
+
 using namespace std;
 
-int n, k, ret;
 int a[104];
 int visited[104];
+int n, k,ret;
 vector<int> v;
 int main() {
 	cin >> n >> k;
@@ -17,25 +17,26 @@ int main() {
 		if (!visited[a[i]]) {
 			if (v.size() == n) {
 				int last = 0, pos;
-				for (int tmp : v) {
-					int here = 200;
+				for (int tem : v) {
+					int here = 104;
 					for (int j = i + 1; j < k; j++) {
-						if (tmp == a[j]) {
+						if (a[j] == tem) {
 							here = j;
 							break;
 						}
 					}
 					if (here > last) {
 						last = here;
-						pos = tmp;
+						pos = tem;
 					}
 				}
 				visited[pos] = 0;
 				ret++;
 				v.erase(find(v.begin(), v.end(), pos));
-			}		
-			v.push_back(a[i]);
+			}
 			visited[a[i]] = 1;
+
+			v.push_back(a[i]);
 		}
 	}
 	cout << ret << '\n';
