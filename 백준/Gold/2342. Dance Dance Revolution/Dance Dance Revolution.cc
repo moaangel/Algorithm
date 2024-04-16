@@ -8,14 +8,11 @@ vector<int>v;
 
 int n;
 
-int check(int from, int to) {
-	//처음에는 2
-	if (from == 0) return 2;
-	//다시 누르면 1
-	if (from == to) return 1;
-	//반대일 경우
-	if (abs(from - to) == 2) return 4;
-	//인접할 경우
+int check(int foot, int to) {
+	if (foot == 0) return 2;
+	if (foot == to) return 1;
+	if (abs(foot - to) == 2) return 4;
+	
 	return 3;
 }
 
