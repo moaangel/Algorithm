@@ -1,21 +1,24 @@
 #include <iostream>
-
+#include <algorithm>
 using namespace std;
 
+int dy[4] = { 0,1,0,-1 };
+int dx[4] = { 1,0,-1,0 };
 
-int n,cnt,maxv=0;
-int adj[101][101];
-int visited[101][101];
-int dy[] = { -1,0,1,0 };
-int dx[] = { 0,1,0,-1 };
-void dfs(int x, int y, int h) {
-	visited[x][y] = 1;
+int a[102][102];
+int visited[102][102];
+int n,ret=1,mn=101,mx;
+
+void dfs(int y, int x, int high) {
+	visited[y][x] = 1;
 
 	for (int i = 0; i < 4; i++) {
 		int ny = y + dy[i];
 		int nx = x + dx[i];
-		if (ny < 0 || nx < 0 || ny >= n || nx >= n || !adj[nx][ny]) continue;
-		if (adj[nx][ny] > h && !visited[nx][ny]) dfs(nx, ny, h);
+
+		if (ny < 0 || nx < 0 || ny >= n || nx >= n)continue;
+		if (a[ny][nx] <= high || visited[ny][nx])continue;
+		dfs(ny, nx, high);
 	}
 }
 
@@ -23,21 +26,25 @@ int main() {
 	cin >> n;
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
-			cin >> adj[i][j];
+			cin >> a[i][j];
+			mn = min(mn, a[i][j]);
+			mx = max(mx, a[i][j]);
 		}
 	}
-	for (int i = 0; i < 100; i++) {
-		fill(&visited[0][0], &visited[0][0] + 101 * 101, 0);
-		for (int x = 0; x < n; x++) {
-			for (int y = 0; y < n; y++) {
-				if (adj[x][y] > i && !visited[x][y]) {
-					dfs(x, y, i);
-					cnt++;
+
+	for (int h = mn; h < mx; h++) {
+		fill(&visited[0][0], &visited[0][0] + 102 * 102, 0);
+		int temp = 0;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (a[i][j] > h && !visited[i][j]) {
+					temp++;
+					dfs(i, j, h);
 				}
 			}
 		}
-		if (cnt > maxv) maxv = cnt;
-		cnt = 0;
+		ret = max(ret, temp);
 	}
-	cout << maxv;
+
+	cout << ret << '\n';
 }
