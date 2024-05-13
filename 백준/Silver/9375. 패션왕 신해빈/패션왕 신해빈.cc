@@ -1,33 +1,29 @@
 #include <iostream>
 #include <map>
 #include <string>
-
 using namespace std;
 
-int t,n;
-int main(){
+map<string, int> cloth;
+int n, t;
+int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
 
 	cin >> t;
-	
-	for (int i = 0; i < t; i++){
-		map<string, int> cloth;
+	for (int tc = 0; tc < t; tc++) {
+		if (cloth.size())cloth.clear();
 		cin >> n;
-		
-		for (int j = 0; j < n; j++){
-			cin.ignore();
-			string s,r;
-			getline(cin, s);
-			int a = s.find(" ");
-			r = s.substr(a+1);
-			cloth[r]++;
+		for (int i = 0; i < n; i++) {
+			string a, b;
+			cin >> a >> b;
+			cloth[b] += 1;
 		}
 		long long ret = 1;
-		for (auto e : cloth){
-			ret *= (e.second + 1);
+		for (pair<string, int> a : cloth) {
+			ret *= (a.second + 1);
 		}
 		ret--;
-		cout << ret << "\n";
+		cout << ret << '\n';
 	}
+	return 0;
 }
