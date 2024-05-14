@@ -3,50 +3,44 @@
 #include <algorithm>
 using namespace std;
 
-int n, m,go, best,bestnum;
-vector<int> com[10001];
-int visited[10001];
+vector<int> v[10002];
+int visited[10002];
 vector<int> ret;
+int n, m, mx, temp;
 
-int dfs(int i) {
-	visited[i] = 1;
-	int cnt = 1;
-	for (int a : com[i]) {
-		if (!visited[a])
-			cnt += dfs(a);
+void dfs(int here) {
+	temp++;
+	visited[here] = 1;
+
+	for (int a : v[here]) {
+		if (visited[a]) continue;
+		dfs(a);
 	}
-	return cnt;
 }
 
 int main() {
 	cin >> n >> m;
 	for (int i = 0; i < m; i++) {
-		int here, there;
-		cin >> there >> here;
-		com[here].push_back(there);
+		int b, a;
+		cin >> b >> a;
+		v[a].push_back(b);
 	}
-
-	for (int i = 0; i <= n; i++) {
-		fill(&visited[0], &visited[0] + 10001, 0);
-		if (com[i].size() && !visited[i]) {
-			go = dfs(i);
-			if (go > best) {
-				best = go;
-				if (ret.size()) {
-					ret.clear();
-					ret.push_back(i);
-				}
-				else
-					ret.push_back(i);
-			}
-			else if (go == best)
-				ret.push_back(i);
+	for (int i = 1; i <= n; i++) {
+		temp = 0;
+		fill(visited, visited + 10002, 0);
+		dfs(i);
+		if (mx < temp) {
+			if (ret.size())ret.clear();
+			ret.push_back(i);
+			mx = temp;
 		}
+		else if (mx == temp) ret.push_back(i);
 	}
-
 	sort(ret.begin(), ret.end());
 
 	for (int a : ret) {
 		cout << a << " ";
 	}
+	cout << '\n';
+	return 0;
 }
