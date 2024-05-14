@@ -1,23 +1,20 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
 using namespace std;
 
-int ans = 50000;
-int n, m, ret;
-int	a[51][51];
-vector<pair<int, int>> chick;
-vector<pair<int, int>> home;
-vector<vector<int>> chickL;
+int n, m;
+vector<pair<int, int>>home;
+vector<pair<int, int>>chk;
+vector<vector<int>> selectchk;
 
-void combi(int index, vector<int> v) {
+void combi(int idx, vector<int> v) {
 	if (v.size() == m) {
-		chickL.push_back(v);
+		selectchk.push_back(v);
 		return;
 	}
 
-	for (int i = index + 1; i < chick.size(); i++) {
+	for (int i = idx + 1; i < chk.size(); i++) {
 		v.push_back(i);
 		combi(i, v);
 		v.pop_back();
@@ -28,27 +25,25 @@ int main() {
 	cin >> n >> m;
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
-			cin >> a[i][j];
-			if (a[i][j] == 2)
-				chick.push_back({ i,j });
-			if (a[i][j] == 1)
-				home.push_back({ i,j });
+			int num;
+			cin >> num;
+			if (num == 1)home.push_back({ i,j });
+			if (num == 2)chk.push_back({ i,j });
 		}
 	}
 	vector<int> v;
 	combi(-1, v);
-
-	for (vector<int> list : chickL) {
-		ret = 0;
-		for (pair<int, int> hd : home) {
-			int mindis = 50000;
-			for (int cd : list) {
-				int dis = abs(hd.first - chick[cd].first) + abs(hd.second - chick[cd].second);
-				mindis = min(mindis, dis);
+	int ret = 50000;
+	for (auto slct : selectchk) {
+		int dir = 0;
+		for (pair<int, int> h : home) {
+			int temp = 500000;
+			for (int a : slct) {
+				temp = min(temp, abs(chk[a].first - h.first) + abs(chk[a].second - h.second));
 			}
-			ret += mindis;
+			dir += temp;
 		}
-		ans = min(ans, ret);
+		ret = min(ret, dir);
 	}
-	cout << ans << endl;
+	cout << ret << '\n';
 }
