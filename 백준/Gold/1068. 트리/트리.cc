@@ -1,42 +1,41 @@
 #include <iostream>
 #include <vector>
-
 using namespace std;
 
-vector<int> tree[50];
-int visited[50];
-int n,ls,cnt,p;
-bool isleaf;
+int n,ret,k,rootnode;
+vector<int> v[52];
 
-void dfs(int i) {
-	visited[i] = 1;
-	if (tree[i].size()) {
-		for (int a : tree[i]) {
-			if (a == ls && tree[i].size() == 1) {
-				cnt++;
-				return;
+void dfs(int here) {
+	if (!v[here].size())ret++;
+	else {
+		for (int a : v[here]) {
+			if (a == k) {
+				if (v[here].size() == 1) ret++;
+				continue;
 			}
-			if (visited[a] == 0 && a != ls)
-				dfs(a);
+			else dfs(a);
 		}
 	}
-	else cnt++;
 }
 
 int main() {
 	cin >> n;
 	for (int i = 0; i < n; i++) {
-		int parant;
-		cin >> parant;
-		if (parant == -1) {
-			p = i;
-			continue; 
+		int num;
+		cin >> num;
+		if (num == -1) {
+			rootnode = i;
+			continue;
 		}
-		else tree[parant].push_back(i);
+		v[num].push_back(i);
 	}
-	cin >> ls;
-	if (ls != p) {
-		dfs(p);
+	cin >> k;
+	if (k == rootnode) {
+		cout << 0 << '\n';
+		return 0;
 	}
-	cout << cnt << endl;
+
+	dfs(rootnode);
+
+	cout << ret << '\n';
 }
