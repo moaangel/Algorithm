@@ -1,62 +1,59 @@
-#include<iostream>
-#include <vector>
-#include <algorithm>
-#include <string>
-#include <cmath>
+#include <iostream>
+
 using namespace std;
 
-int dy[8] = { 1,1,1,0,-1,-1,-1,0 };
-int dx[8] = { -1,0,1,1,1,0,-1,-1 };
+int dy[4] = { 0,1,1,1 };
+int dx[4] = { 1,1,0,-1 };
 
 char a[22][22];
-int visited[22][22];
-int n;
+int T,n,p;
 bool flag;
-
-void dfs(int y, int x, int dir, int cnt) {
-	if (cnt == 5) {
-		flag = 1;
-		return;
+void check(int y, int x, int dir) {
+	int temp = 1;
+	int ny = y, nx = x;
+	while (1) {
+		if (temp == 5) {
+			flag = 1;
+			return;
+		}
+		
+		ny += dy[dir];
+		nx += dx[dir];
+		if (ny < 0 || nx < 0 || ny >= n || nx >= n) break;
+		if (a[ny][nx] != 'o')break;
+		else temp++;
 	}
-
-	int ny = y + dy[dir];
-	int nx = x + dx[dir];
-	if (ny < 0 || nx < 0 || ny >= n || nx >= n) return;
-	if (a[ny][nx] == 'o')dfs(ny, nx, dir, cnt + 1);
 }
 
-int main(int argc, char** argv)
-{
-	ios::sync_with_stdio(false);
-	cin.tie(NULL); cout.tie(NULL);
-	int test_case;
-	int T;
-	//freopen("input.txt", "r", stdin);
+void dfs(int y, int x) {
+
+	for (int i = 0; i < 4; i++) {
+		int ny = y + dy[i];
+		int nx = x + dx[i];
+
+		if (ny < 0 || nx < 0 || ny >= n || nx >= n)continue;
+		if (a[ny][nx] == 'o')check(y, x, i);
+	}
+}
+
+int main() {
 	cin >> T;
-	for (test_case = 1; test_case <= T; ++test_case)
-	{
+	for (int tc = 1; tc <= T; tc++) {
 		flag = 0;
 		cin >> n;
 		for (int i = 0; i < n; i++) {
-			string s;
-			cin >> s;
 			for (int j = 0; j < n; j++) {
-				a[i][j] = s[j];
+				cin >> a[i][j];
 			}
 		}
-
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				if (a[i][j] == 'o') {
-					for (int k = 0; k < 8; k++) {
-						dfs(i, j, k, 1);
-					}
-				}
+				if (a[i][j] == 'o')
+					dfs(i, j);
 			}
 		}
-
-		if (flag) cout << "#" << test_case << " YES" << '\n';
-		else cout << "#" << test_case << " NO" << '\n';
+		cout << "#" << tc << " ";
+		if (flag) cout << "YES" << '\n';
+		else cout << "NO" << '\n';
 	}
-	return 0;//정상종료시 반드시 0을 리턴해야합니다.
 }
