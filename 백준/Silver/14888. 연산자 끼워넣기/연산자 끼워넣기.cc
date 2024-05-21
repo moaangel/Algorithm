@@ -1,32 +1,33 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 using namespace std;
 
-int n,p,mi,mul,di,minret= 1000000000,maxret= -1000000000;
-int a[12];
+int n, mn = 1000000001, mx= -1000000001;
+int a[13];
 int oper[4];
 
-void brute(int num,int idx,int p,int mi,int mul, int div) {
-	if (idx == n-1) {
-		minret = min(minret, num);
-		maxret = max(maxret, num);
+void go(int num, int idx, int plus, int minus, int mul, int div) {
+	if (idx == n) {
+		mn = min(mn, num);
+		mx = max(mx, num);
 		return;
 	}
 
-	if (p) brute(num + a[idx+1], idx + 1, p-1, mi, mul, div);
-	if (mi) brute(num - a[idx + 1], idx + 1, p, mi-1, mul, div);
-	if (mul) brute(num * a[idx + 1], idx + 1, p, mi, mul-1, div);
-	if (div) brute(num / a[idx + 1], idx + 1, p, mi, mul, div-1);
-
+	if (plus) go(num + a[idx], idx + 1, plus - 1, minus, mul, div);
+	if (minus) go(num - a[idx], idx + 1, plus, minus - 1, mul, div);
+	if (mul) go(num * a[idx], idx + 1, plus, minus, mul - 1, div);
+	if (div) go(num / a[idx], idx + 1, plus , minus, mul, div - 1);
 }
 
-int main() {
+int main(){
 	cin >> n;
 	for (int i = 0; i < n; i++) {
 		cin >> a[i];
 	}
-	cin >> p >> mi >> mul >> di;
-	brute(a[0],0,p, mi, mul, di);
-	cout << maxret << '\n' << minret << '\n';
+	for (int i = 0; i < 4; i++) {
+		cin >> oper[i];
+	}
+
+	go(a[0], 1, oper[0], oper[1], oper[2], oper[3]);
+	cout << mx << '\n' << mn << '\n';
 }
