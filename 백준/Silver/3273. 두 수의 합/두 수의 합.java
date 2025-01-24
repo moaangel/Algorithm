@@ -2,9 +2,10 @@ import java.util.*;
 
 public class Main {
     static int n,x,ret =0;
-    static List<Integer> numList = new ArrayList<Integer>();
 
     public static void main(String[] args) {
+        List<Integer> numList = new ArrayList<Integer>();
+
             Scanner sc = new Scanner(System.in);
             n = sc.nextInt();
             for (int i=0; i<n; i++){
