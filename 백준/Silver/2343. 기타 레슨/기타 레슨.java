@@ -1,44 +1,51 @@
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-    static int n,m,l=1, r,ret;
-    static int[] arr = new int[100002];
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-    static boolean check(int mid){
-        int temp = 0;
-        int cnt = 0;
-        for (int i=0; i<n; i++){
-            if (temp >= arr[i]){
-                temp -= arr[i];
-            }
-            else{
-                temp = mid;
-                cnt++;
-                if(temp< arr[i])return false;
-                temp -= arr[i];
-            }
-        }
-        return cnt <= m;
-    }
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
 
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
-        m = sc.nextInt();
-        for (int i=0; i<n; i++) {
-            arr[i] = sc.nextInt();
-            r += arr[i];
+        int[] arr = new int[N];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        while(l<=r){
-            int mid = (l+r) / 2;
-            if (check(mid)){
-                ret = mid;
-                r = mid - 1;
-            } else{
-                l = mid +1;
+        int min = 0;
+        int max = 0;
+
+        for (int i = 0; i < N; i++) {
+            min = Math.max(min, arr[i]);
+            max += arr[i];
+        }
+
+        while (min < max) {
+            int mid = (min + max) / 2;
+            int count = 1;
+            int sum = 0;
+
+            for (int i = 0; i < N; i++) {
+                if (sum + arr[i] > mid) {
+                    count++;
+                    sum = arr[i];
+                } else {
+                    sum += arr[i];
+                }
+            }
+
+            if (count <= M) {
+                max = mid;
+            } else {
+                min = mid + 1;
             }
         }
-        System.out.println(ret);
+
+        System.out.println(min);
     }
 }
