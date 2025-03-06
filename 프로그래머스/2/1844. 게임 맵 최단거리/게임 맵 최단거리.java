@@ -1,38 +1,33 @@
-import java.util.Queue;
-import java.util.LinkedList;
-import java.awt.Point;
-
+import java.util.*;
 
 class Solution {
-    static int[] dy = {1,0,-1,0};
-    static int[] dx = {0,1,0,-1};
-
-    static int[][] visited = new int[102][102];
     public int solution(int[][] maps) {
         int answer = 0;
+        int[] dy = {1,0,-1,0};
+        int[] dx = {0,1,0,-1};
         int n = maps.length;
         int m = maps[0].length;
-        Queue<Point> q = new LinkedList<>();
-        visited[0][0] = 1;
-        q.add(new Point(0,0));
+        int[][] visited = new int[n][m];
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{0,0});
+        visited[0][0]= 1;
         while(!q.isEmpty()){
-            Point p = q.poll();           
-            int y = p.x;
-            int x = p.y;            
+            int[] yx = q.poll();
+            int y = yx[0];
+            int x = yx[1];
             
             for (int i=0; i<4; i++){
                 int ny = y + dy[i];
                 int nx = x + dx[i];
                 
-                if (ny < 0 || nx < 0 || ny >= n || nx >= m)continue;
-                if (maps[ny][nx] == 1 && visited[ny][nx] == 0){
-                    visited[ny][nx] = visited[y][x] + 1;
-                    q.add(new Point(ny,nx));
-                }
+                if (ny < 0 || nx < 0 || ny >= n || nx >= m || visited[ny][nx] != 0 || maps[ny][nx] == 0)continue;
+                visited[ny][nx] = visited[y][x] + 1;
+                q.add(new int[]{ny,nx});
             }
         }
-        if (visited[n-1][m-1] != 0)answer = visited[n-1][m-1];
-        else answer = -1;
+        answer = visited[n-1][m-1];
+        if(answer == 0) answer = -1;
+        
         return answer;
     }
 }
