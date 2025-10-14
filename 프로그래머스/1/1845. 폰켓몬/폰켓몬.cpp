@@ -1,16 +1,20 @@
 #include <vector>
 #include <map>
+
 using namespace std;
 
 int solution(vector<int> nums)
 {
-    int answer = 0;
-    int vsize = nums.size() / 2;
-    map<int,int> mp;
+    int answer = nums.size() / 2;
+    map<int,int> counts;
+    
     for (int num : nums){
-        mp[num]++;
+        counts[num]++;
     }
-    if (mp.size() >= vsize)answer = vsize;
-    else answer = mp.size();
+    int temp =0;
+    for (auto a : counts){
+        temp++;
+    }
+    answer = answer < temp ? answer : temp;
     return answer;
 }
