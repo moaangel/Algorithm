@@ -7,11 +7,11 @@ using namespace std;
 int solution(vector<vector<string>> clothes) {
     int answer = 1;
     map<string,int> mp;
-    for (vector<string> temp : clothes){
-        mp[temp[1]]++;
+    for (int i=0; i<clothes.size(); i++){
+        mp[clothes[i][1]]++;
     }
     for (auto a : mp){
-        answer *= a.second + 1;
+        answer *= (a.second + 1);
     }
     answer--;
     return answer;
