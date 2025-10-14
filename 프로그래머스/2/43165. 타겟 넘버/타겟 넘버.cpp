@@ -3,22 +3,25 @@
 
 using namespace std;
 
-void dfs(vector<int> &v,int num,int idx, int tar, int &ret){
-    if(idx == v.size()-1){
-        if (num==tar) {
-            ret++;
+int answer = 0;
+
+void go(vector<int> numbers, int target,int sumNumber ,int idx){
+    if(idx == numbers.size()){
+        if (sumNumber == target){
+            answer++;
             return;
         }
         else return;
     }
-    dfs(v,num + v[idx+1],idx +1,tar,ret);
-    dfs(v,num - v[idx+1],idx +1,tar,ret);
+    
+    go(numbers,target,sumNumber + numbers[idx], idx+1);
+    go(numbers,target,sumNumber - numbers[idx], idx+1);
     
     return;
 }
 
 int solution(vector<int> numbers, int target) {
-    int answer = 0;
-    dfs(numbers,0,-1,target,answer);
-    return answer;
+    go(numbers,target,0,0);
+    int temp = answer;
+    return temp;
 }
