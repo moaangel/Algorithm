@@ -1,32 +1,34 @@
 #include <string>
 #include <vector>
-
+#include <algorithm>
 using namespace std;
-
-bool check(int level, vector<int> diffs, vector<int> times, long long limit){
-    long long temp = times[0];
-    for (int i=1; i<times.size(); i++){
-        if(level >= diffs[i]){
-            temp += times[i];
-        } else{
-            temp += (times[i-1] + times[i]) * (diffs[i] - level) + times[i];
-        }
-        
-        if(temp > limit) return false;
-    }
-    
-    return temp <= limit;
-}
 
 int solution(vector<int> diffs, vector<int> times, long long limit) {
     int answer = 0;
-    int l = 1, r = 100000;
-    while(l<=r){
-        int mid = (l+r) / 2;
-        if(check(mid,diffs,times,limit)){
-            answer = mid;
-            r = mid - 1;
-        }else l = mid + 1;
+    int temp =0;
+    for (int i = 0; i < diffs.size(); i++){
+        temp = max(temp, diffs[i]);
     }
+    int l = 1, r = temp;
+
+    while(l<=r){
+        int result = (l+r) / 2;
+        long long pTime = 0;
+        for (int i = 0; i<diffs.size(); i++){
+            if(diffs[i] <= result){
+                pTime += times[i];
+            }
+            else {
+                pTime += (((diffs[i] - result) * (times[i] + times[i-1])) + times[i]);
+            }
+            if(pTime > limit)break;
+        }
+        if(pTime <= limit){
+            answer = result;
+            r = result - 1;
+        }
+        else l = result + 1;
+    }
+    
     return answer;
 }
